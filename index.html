@@ -1,0 +1,850 @@
+<!DOCTYPE html>
+<html lang="en" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Luiseer Family - Magical Paris Journey 2025</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcode-generator/1.4.4/qrcode.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        'royal-blue': '#1e40af',
+                        'golden': '#f59e0b',
+                        'emerald': '#10b981',
+                        'rose': '#f43f5e',
+                        'violet': '#8b5cf6',
+                        'sky': '#0ea5e9',
+                        'amber': '#f59e0b',
+                    },
+                    fontFamily: {
+                        'display': ['Inter', 'system-ui', 'sans-serif'],
+                        'elegant': ['Georgia', 'serif'],
+                    },
+                    animation: {
+                        'float': 'float 6s ease-in-out infinite',
+                        'glow': 'glow 2s ease-in-out infinite',
+                        'shimmer': 'shimmer 2s linear infinite',
+                        'confetti-fall': 'confetti 3s ease-out infinite',
+                        'slide-up': 'slideUp 0.8s ease-out',
+                        'fade-in': 'fadeIn 1s ease-in',
+                        'spin-slow': 'spin 3s linear infinite',
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        @keyframes float {
+            0%, 100% { transform: translateY(0px); }
+            50% { transform: translateY(-25px); }
+        }
+
+        @keyframes glow {
+            0%, 100% { box-shadow: 0 0 20px rgba(245, 158, 11, 0.5); }
+            50% { box-shadow: 0 0 40px rgba(245, 158, 11, 0.8), 0 0 60px rgba(245, 158, 11, 0.6); }
+        }
+
+        @keyframes shimmer {
+            0% { background-position: -1000px 0; }
+            100% { background-position: 1000px 0; }
+        }
+
+        @keyframes confetti {
+            0% { transform: translateY(-100vh) rotate(0deg); opacity: 1; }
+            100% { transform: translateY(100vh) rotate(720deg); opacity: 0; }
+        }
+
+        @keyframes slideUp {
+            from { transform: translateY(100%); opacity: 0; }
+            to { transform: translateY(0); opacity: 1; }
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+
+        @keyframes spin {
+            from { transform: rotate(0deg); }
+            to { transform: rotate(360deg); }
+        }
+
+        @keyframes loading-pulse {
+            0%, 100% { opacity: 0.3; }
+            50% { opacity: 1; }
+        }
+
+        .gradient-bg {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 50%, #f093fb 100%);
+        }
+
+        .premium-card {
+            background: linear-gradient(145deg, #1e293b, #334155);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+        }
+
+        .dark .premium-card {
+            background: linear-gradient(145deg, #0f172a, #1e293b);
+        }
+
+        .boarding-ticket {
+            background: linear-gradient(135deg, #1e3a8a 0%, #3b82f6 50%, #60a5fa 100%);
+            border-left: 5px dashed rgba(255, 255, 255, 0.4);
+            box-shadow: 0 25px 50px rgba(0, 0, 0, 0.2);
+        }
+
+        .qr-container {
+            background: white;
+            padding: 12px;
+            border-radius: 12px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+            border: 2px solid #e5e7eb;
+            transition: all 0.3s ease;
+            cursor: pointer;
+            position: relative;
+        }
+
+        .qr-container:hover {
+            transform: scale(1.08);
+            box-shadow: 0 8px 24px rgba(0, 0, 0, 0.25);
+            border-color: #f59e0b;
+        }
+
+        .qr-container::after {
+            content: '📱 Scan Me';
+            position: absolute;
+            bottom: -25px;
+            left: 50%;
+            transform: translateX(-50%);
+            font-size: 11px;
+            color: rgba(255, 255, 255, 0.8);
+            font-weight: 600;
+            white-space: nowrap;
+        }
+
+        .confetti-piece {
+            position: absolute;
+            width: 10px;
+            height: 10px;
+            animation: confetti 3s ease-out infinite;
+        }
+
+        .shimmer-effect {
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.3), transparent);
+            background-size: 1000px 100%;
+            animation: shimmer 2s infinite;
+        }
+
+        .loading-overlay {
+            position: fixed;
+            inset: 0;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 9999;
+            transition: opacity 0.5s ease;
+        }
+
+        .loading-spinner {
+            width: 70px;
+            height: 70px;
+            border: 5px solid rgba(255, 255, 255, 0.2);
+            border-top-color: #f59e0b;
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+        }
+
+        .loading-dots span {
+            width: 14px;
+            height: 14px;
+            background: #f59e0b;
+            border-radius: 50%;
+            display: inline-block;
+            margin: 0 5px;
+            animation: loading-pulse 1.4s infinite ease-in-out;
+        }
+
+        .loading-dots span:nth-child(2) { animation-delay: 0.2s; }
+        .loading-dots span:nth-child(3) { animation-delay: 0.4s; }
+
+        .glass-effect {
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+        }
+
+        .neon-glow {
+            text-shadow: 0 0 10px currentColor, 0 0 20px currentColor, 0 0 30px currentColor, 0 0 40px currentColor;
+        }
+
+        .ticket-perforation {
+            border-left: 3px dashed rgba(255, 255, 255, 0.3);
+        }
+    </style>
+</head>
+<body class="bg-gradient-to-br from-slate-900 via-purple-900 to-slate-900 min-h-screen font-display text-gray-100 overflow-x-hidden">
+
+    <!-- Loading Screen -->
+    <div id="loading-screen" class="loading-overlay">
+        <div class="text-center">
+            <h2 class="text-5xl font-bold text-white mb-10 neon-glow">✨ Preparing Your Journey ✨</h2>
+            <div class="loading-spinner mx-auto mb-6"></div>
+            <div class="loading-dots">
+                <span></span>
+                <span></span>
+                <span></span>
+            </div>
+            <p class="text-white/80 mt-6 text-lg">Loading magical experiences...</p>
+        </div>
+    </div>
+
+    <!-- Main Content -->
+    <div id="main-content" class="hidden">
+
+    <!-- Confetti Container -->
+    <div id="confetti-container" class="fixed inset-0 pointer-events-none z-50"></div>
+
+    <!-- Hero Section -->
+    <section class="relative min-h-screen flex items-center justify-center overflow-hidden">
+        <div class="absolute inset-0 gradient-bg opacity-95"></div>
+        <div class="absolute inset-0 bg-[url('data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iNjAiIGhlaWdodD0iNjAiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+PGRlZnM+PHBhdHRlcm4gaWQ9ImdyaWQiIHdpZHRoPSI2MCIgaGVpZ2h0PSI2MCIgcGF0dGVyblVuaXRzPSJ1c2VyU3BhY2VPblVzZSI+PHBhdGggZD0iTSAxMCAwIEwgMCAwIDAgMTAiIGZpbGw9Im5vbmUiIHN0cm9rZT0icmdiYSgyNTUsMjU1LDI1NSwwLjEpIiBzdHJva2Utd2lkdGg9IjEiLz48L3BhdHRlcm4+PC9kZWZzPjxyZWN0IHdpZHRoPSIxMDAlIiBoZWlnaHQ9IjEwMCUiIGZpbGw9InVybCgjZ3JpZCkiLz48L3N2Zz4=')] opacity-20"></div>
+
+        <div class="relative z-10 text-center px-4 max-w-5xl mx-auto animate-fade-in">
+            <div class="inline-block glass-effect rounded-full px-8 py-3 mb-6">
+                <span class="text-golden font-semibold text-sm uppercase tracking-widest">✈️ Premium Travel Experience</span>
+            </div>
+
+            <h1 class="text-5xl md:text-8xl font-bold text-white font-elegant mb-6 drop-shadow-2xl">
+                The Luiseer Family
+            </h1>
+
+            <h2 class="text-3xl md:text-6xl font-semibold text-golden mb-8 animate-glow">
+                Magical Paris Adventure 2025
+            </h2>
+
+            <p class="text-xl md:text-2xl text-white/90 max-w-3xl mx-auto leading-relaxed mb-10">
+                An exclusive journey from sunny Anaheim, California to the enchanting Disney Village at Disneyland Paris
+            </p>
+
+            <!-- Journey Route -->
+            <div class="glass-effect rounded-3xl p-8 max-w-3xl mx-auto">
+                <div class="grid md:grid-cols-3 gap-6 items-center">
+                    <div class="text-center">
+                        <div class="text-5xl mb-3">🌴</div>
+                        <div class="text-white font-bold text-lg">Anaheim, CA</div>
+                        <div class="text-white/70">Departure</div>
+                    </div>
+                    <div class="text-center">
+                        <div class="text-6xl animate-float">✈️</div>
+                        <div class="text-golden font-bold mt-2">First Class</div>
+                    </div>
+                    <div class="text-center">
+                        <div class="text-5xl mb-3">🏰</div>
+                        <div class="text-white font-bold text-lg">Disney Village, Paris</div>
+                        <div class="text-white/70">Destination</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Floating Decorations -->
+        <div class="absolute top-20 left-10 text-6xl opacity-20 animate-float">⭐</div>
+        <div class="absolute top-40 right-20 text-5xl opacity-25 animate-float" style="animation-delay: 1s;">🎭</div>
+        <div class="absolute bottom-40 left-20 text-6xl opacity-20 animate-float" style="animation-delay: 2s;">🎪</div>
+        <div class="absolute bottom-20 right-10 text-5xl opacity-25 animate-float" style="animation-delay: 3s;">🎆</div>
+    </section>
+
+    <!-- Parks Section -->
+    <section class="py-20 bg-gradient-to-b from-slate-800 to-slate-900">
+        <div class="max-w-7xl mx-auto px-4">
+            <h2 class="text-5xl font-bold text-center mb-16 text-white">
+                🎢 Your Magical Destinations
+            </h2>
+
+            <div class="grid md:grid-cols-2 gap-10">
+                <!-- Disneyland Park -->
+                <div class="premium-card rounded-3xl overflow-hidden transform hover:scale-105 transition-all duration-500">
+                    <div class="h-72 bg-gradient-to-br from-rose-500 to-violet-600 relative">
+                        <div class="absolute inset-0 bg-black/30"></div>
+                        <div class="absolute inset-0 flex items-center justify-center text-center">
+                            <div>
+                                <div class="text-9xl mb-4">🏰</div>
+                                <h3 class="text-4xl font-bold text-white mb-2">Disneyland® Park</h3>
+                                <p class="text-xl text-white/90">Where Dreams Come True</p>
+                            </div>
+                        </div>
+                        <div class="absolute top-5 right-5 bg-golden text-white px-4 py-2 rounded-full font-bold text-sm">
+                            Classic Magic
+                        </div>
+                    </div>
+                    <div class="p-8">
+                        <h4 class="text-2xl font-bold text-white mb-4">Timeless Enchantment</h4>
+                        <p class="text-gray-300 mb-6 leading-relaxed">
+                            Step into a world of wonder with iconic attractions, beloved characters, and unforgettable experiences in the heart of Disney magic.
+                        </p>
+                        <div class="flex flex-wrap gap-3">
+                            <span class="bg-rose-500/20 text-rose-300 px-4 py-2 rounded-full text-sm font-semibold">Fantasyland</span>
+                            <span class="bg-violet-500/20 text-violet-300 px-4 py-2 rounded-full text-sm font-semibold">Main Street USA</span>
+                            <span class="bg-sky-500/20 text-sky-300 px-4 py-2 rounded-full text-sm font-semibold">Adventureland</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Walt Disney Studios -->
+                <div class="premium-card rounded-3xl overflow-hidden transform hover:scale-105 transition-all duration-500">
+                    <div class="h-72 bg-gradient-to-br from-sky-500 to-royal-blue relative">
+                        <div class="absolute inset-0 bg-black/30"></div>
+                        <div class="absolute inset-0 flex items-center justify-center text-center">
+                            <div>
+                                <div class="text-9xl mb-4">🎬</div>
+                                <h3 class="text-4xl font-bold text-white mb-2">Walt Disney Studios®</h3>
+                                <p class="text-xl text-white/90">Lights, Camera, Action!</p>
+                            </div>
+                        </div>
+                        <div class="absolute top-5 right-5 bg-rose-600 text-white px-4 py-2 rounded-full font-bold text-sm">
+                            Thrills & Action
+                        </div>
+                    </div>
+                    <div class="p-8">
+                        <h4 class="text-2xl font-bold text-white mb-4">Cinematic Adventures</h4>
+                        <p class="text-gray-300 mb-6 leading-relaxed">
+                            Experience the excitement of movie magic with thrilling rides, spectacular shows, and behind-the-scenes adventures.
+                        </p>
+                        <div class="flex flex-wrap gap-3">
+                            <span class="bg-sky-500/20 text-sky-300 px-4 py-2 rounded-full text-sm font-semibold">Marvel Campus</span>
+                            <span class="bg-royal-blue/30 text-blue-300 px-4 py-2 rounded-full text-sm font-semibold">Star Wars</span>
+                            <span class="bg-violet-500/20 text-violet-300 px-4 py-2 rounded-full text-sm font-semibold">Pixar World</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Challenge Tracker -->
+    <section class="py-16 bg-slate-900">
+        <div class="max-w-5xl mx-auto px-4">
+            <div class="premium-card rounded-3xl p-8 md:p-12 animate-glow">
+                <h3 class="text-3xl md:text-4xl font-bold text-center mb-8 text-white">
+                    🎯 Stellar Achievement Challenge
+                </h3>
+
+                <div class="bg-gradient-to-r from-emerald-600 to-sky-600 rounded-2xl p-8 mb-6">
+                    <h4 class="text-2xl font-bold text-white mb-4 text-center">⏰ Challenge Countdown</h4>
+                    <div id="countdown-timer" class="text-4xl md:text-6xl font-bold text-white text-center neon-glow mb-3">
+                        00:00:00
+                    </div>
+                    <p class="text-white/90 text-center text-lg">Until 12:30 PM EST Today</p>
+                </div>
+
+                <!-- Progress Bar -->
+                <div class="bg-slate-700 rounded-full h-6 mb-6 overflow-hidden">
+                    <div id="progress-bar" class="bg-gradient-to-r from-golden to-rose-500 h-6 rounded-full transition-all duration-1000 shimmer-effect" style="width: 0%"></div>
+                </div>
+
+                <div id="reward-status" class="text-xl font-semibold text-center text-gray-300 mb-6">
+                    Complete your streak to unlock premium park access! 🎪
+                </div>
+
+                <blockquote class="text-center text-lg italic text-gray-400 border-l-4 border-golden pl-6 mt-8">
+                    "Every achievement unlocks new possibilities. Complete today's challenge and watch your family's adventure expand to include both spectacular Disney parks."
+                </blockquote>
+            </div>
+        </div>
+    </section>
+
+    <!-- Boarding Passes -->
+    <section class="py-20 bg-gradient-to-b from-slate-900 to-slate-800">
+        <div class="max-w-7xl mx-auto px-4">
+            <h3 class="text-4xl md:text-5xl font-bold text-center mb-4 text-white">
+                ✈️ Premium Boarding Passes
+            </h3>
+            <p class="text-center text-gray-400 mb-12 text-lg">Scan QR codes with your mobile device to verify authenticity</p>
+
+            <div class="grid md:grid-cols-2 gap-8 mb-12" id="boarding-passes-container">
+                <!-- Boarding passes will be generated here -->
+            </div>
+
+            <div class="text-center">
+                <button onclick="exportAllPasses()" class="bg-gradient-to-r from-golden to-amber-600 text-white font-bold py-5 px-10 rounded-full text-lg shadow-2xl hover:shadow-golden/50 transform hover:scale-105 transition-all duration-300">
+                    📥 Download All Boarding Passes (PDF)
+                </button>
+            </div>
+        </div>
+    </section>
+
+    <!-- Proof Submission -->
+    <section class="py-20 bg-slate-900">
+        <div class="max-w-4xl mx-auto px-4">
+            <div class="premium-card rounded-3xl p-8 md:p-12">
+                <h3 class="text-3xl md:text-4xl font-bold text-center mb-10 text-white">
+                    📝 Submit Achievement Proof
+                </h3>
+
+                <form id="proof-form" class="space-y-8">
+                    <div>
+                        <label class="block text-xl font-semibold text-gray-300 mb-3">
+                            📄 Achievement Description
+                        </label>
+                        <textarea
+                            id="text-proof"
+                            rows="5"
+                            class="w-full px-5 py-4 text-base border-2 border-gray-600 rounded-2xl focus:ring-4 focus:ring-golden/50 focus:border-golden bg-slate-800 text-white resize-none transition-all"
+                            placeholder="Describe your achievement and how you exceeded your goals today..."
+                            required
+                        ></textarea>
+                    </div>
+
+                    <div>
+                        <label class="block text-xl font-semibold text-gray-300 mb-3">
+                            📎 Supporting Document (Optional)
+                        </label>
+                        <input
+                            type="file"
+                            id="document-proof"
+                            accept=".pdf,.doc,.docx,.jpg,.jpeg,.png"
+                            class="w-full px-5 py-4 text-base border-2 border-gray-600 rounded-2xl focus:ring-4 focus:ring-golden/50 focus:border-golden bg-slate-800 text-white file:mr-4 file:py-3 file:px-6 file:rounded-full file:border-0 file:bg-golden file:text-white file:font-semibold hover:file:bg-amber-600 transition-all"
+                        >
+                        <p class="text-sm text-gray-500 mt-3">
+                            Accepted: PDF, DOC, DOCX, JPG, PNG (Maximum 10MB)
+                        </p>
+                    </div>
+
+                    <div class="text-center pt-4">
+                        <button
+                            type="submit"
+                            class="bg-gradient-to-r from-emerald-600 to-sky-600 text-white font-bold py-5 px-12 rounded-full text-lg shadow-2xl hover:shadow-emerald-500/50 transform hover:scale-105 transition-all duration-300"
+                        >
+                            📧 Submit via Email
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </section>
+
+    <!-- Park Unlock Display -->
+    <section id="park-access" class="py-16 bg-slate-800 hidden">
+        <div class="max-w-4xl mx-auto px-4">
+            <div class="bg-gradient-to-r from-golden to-amber-600 rounded-3xl p-10 text-center shadow-2xl animate-glow">
+                <h3 class="text-4xl font-bold text-white mb-8">🎉 Premium Access Unlocked!</h3>
+                <div id="park-tickets" class="flex justify-center gap-6 flex-wrap">
+                    <!-- Unlocked parks will appear here -->
+                </div>
+            </div>
+        </div>
+    </section>
+
+    </div> <!-- End Main Content -->
+
+    <!-- Confirmation Modal -->
+    <div id="confirmation-modal" class="fixed inset-0 bg-black/70 backdrop-blur-md hidden items-center justify-center z-50 p-4">
+        <div class="premium-card rounded-3xl p-10 max-w-2xl w-full text-center animate-slide-up">
+            <div class="text-7xl mb-6">✅</div>
+            <h4 class="text-4xl font-bold mb-6 text-white" id="confirmation-title">Boarding Pass Verified!</h4>
+
+            <div class="bg-gradient-to-r from-emerald-600 to-sky-600 rounded-2xl p-8 mb-8">
+                <div class="text-white space-y-3">
+                    <p class="text-2xl font-bold" id="passenger-name">Joan Luiser</p>
+                    <p class="text-xl" id="flight-info">Flight AF2845 • Seat 12A</p>
+                    <p class="text-lg opacity-90">Anaheim, CA → Disney Village, Paris</p>
+                    <p class="text-lg opacity-90">December 8-31, 2025</p>
+                </div>
+            </div>
+
+            <div class="bg-emerald-900/50 border-2 border-emerald-500 rounded-xl p-6 mb-8">
+                <p class="text-emerald-300 font-bold text-xl mb-2">
+                    ✓ VALID & CONFIRMED
+                </p>
+                <p class="text-emerald-200 text-sm">
+                    This boarding pass has been authenticated and is ready for use
+                </p>
+            </div>
+
+            <button onclick="closeConfirmationModal()" class="bg-golden text-white font-bold py-4 px-10 rounded-full hover:bg-amber-600 transition-all text-lg">
+                Close
+            </button>
+        </div>
+    </div>
+
+    <!-- Submission Modal -->
+    <div id="submission-modal" class="fixed inset-0 bg-black/70 backdrop-blur-md hidden items-center justify-center z-50 p-4">
+        <div class="premium-card rounded-3xl p-10 max-w-lg w-full text-center animate-slide-up">
+            <div class="text-7xl mb-6">📧</div>
+            <h4 class="text-3xl font-bold mb-6 text-white">Submission Successful!</h4>
+            <p class="text-gray-300 mb-8 text-lg leading-relaxed">
+                Your achievement proof has been prepared and is ready to be sent to the Disney Magic Committee for review.
+            </p>
+            <div class="flex gap-4 justify-center">
+                <button onclick="closeSubmissionModal()" class="bg-gray-600 text-white font-bold py-4 px-8 rounded-full hover:bg-gray-700 transition-all">
+                    Close
+                </button>
+                <button onclick="openEmailComposer()" class="bg-emerald-600 text-white font-bold py-4 px-8 rounded-full hover:bg-emerald-700 transition-all">
+                    📧 Open Email
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Dark mode (always enabled for this design)
+        document.documentElement.classList.add('dark');
+
+        // Family Members - All 4 included
+        const familyMembers = [
+            { name: 'Joan Luiser', seat: '12A', flightId: 'AF2845' },
+            { name: 'Steven Luiser', seat: '12B', flightId: 'AF2845' },
+            { name: 'Abigail Himes Luiser', seat: '12C', flightId: 'AF2845' },
+            { name: 'Maggie Luiser', seat: '12D', flightId: 'AF2845' }
+        ];
+
+        let rewardUnlocked = false;
+        let countdownInterval;
+
+        // Get full URL for QR codes
+        function getFullURL(passengerId) {
+            // Use current page URL or fallback to a placeholder
+            const baseURL = window.location.href.split('?')[0].split('#')[0];
+            return `${baseURL}?verify=${passengerId}`;
+        }
+
+        // Generate functional QR code using qrcode-generator library
+        function createScannableQRCode(text, size = 7) {
+            const qr = qrcode(0, 'H'); // Type 0 (auto), Error correction level H (high)
+            qr.addData(text);
+            qr.make();
+
+            // Create image with proper sizing
+            const cellSize = 4;
+            const margin = 2;
+            const moduleCount = qr.getModuleCount();
+            const imageSize = (moduleCount + margin * 2) * cellSize;
+
+            return qr.createDataURL(cellSize, margin);
+        }
+
+        // Show confirmation modal
+        function showConfirmation(memberIndex) {
+            const member = familyMembers[memberIndex];
+            document.getElementById('passenger-name').textContent = member.name;
+            document.getElementById('flight-info').textContent = `Flight ${member.flightId} • Seat ${member.seat}`;
+            document.getElementById('confirmation-modal').classList.remove('hidden');
+            document.getElementById('confirmation-modal').classList.add('flex');
+            createConfetti();
+        }
+
+        function closeConfirmationModal() {
+            document.getElementById('confirmation-modal').classList.add('hidden');
+            document.getElementById('confirmation-modal').classList.remove('flex');
+        }
+
+        // Check for verification parameter
+        function checkVerificationParam() {
+            const urlParams = new URLSearchParams(window.location.search);
+            const verifyId = urlParams.get('verify');
+
+            if (verifyId !== null) {
+                const memberIndex = parseInt(verifyId);
+                if (memberIndex >= 0 && memberIndex < familyMembers.length) {
+                    setTimeout(() => showConfirmation(memberIndex), 1500);
+                }
+            }
+        }
+
+        // Generate boarding passes
+        function generateBoardingPasses() {
+            const container = document.getElementById('boarding-passes-container');
+
+            familyMembers.forEach((member, index) => {
+                const qrURL = getFullURL(index);
+                const qrDataURL = createScannableQRCode(qrURL);
+
+                const passHTML = `
+                    <div class="boarding-ticket rounded-2xl p-8 text-white relative overflow-hidden animate-float ticket-perforation" style="animation-delay: ${index * 0.15}s" id="pass-${index}">
+                        <div class="absolute top-0 right-0 w-32 h-32 bg-white/10 rounded-full -mr-16 -mt-16"></div>
+
+                        <div class="flex justify-between items-start mb-6">
+                            <div>
+                                <h4 class="text-3xl font-bold mb-1">${member.name}</h4>
+                                <p class="text-white/80 text-lg">Premium Passenger</p>
+                            </div>
+                            <div class="text-right bg-white/20 rounded-lg px-4 py-2">
+                                <div class="text-xs text-white/80 uppercase">Flight</div>
+                                <div class="text-2xl font-bold">${member.flightId}</div>
+                            </div>
+                        </div>
+
+                        <div class="grid grid-cols-2 gap-6 mb-8">
+                            <div class="bg-white/10 rounded-lg p-4">
+                                <div class="text-sm text-white/70 mb-1">From</div>
+                                <div class="font-bold text-lg">Anaheim, CA</div>
+                            </div>
+                            <div class="bg-white/10 rounded-lg p-4">
+                                <div class="text-sm text-white/70 mb-1">To</div>
+                                <div class="font-bold text-lg">Paris, France</div>
+                            </div>
+                            <div class="bg-white/10 rounded-lg p-4">
+                                <div class="text-sm text-white/70 mb-1">Travel Dates</div>
+                                <div class="font-bold">Dec 8-31, 2025</div>
+                            </div>
+                            <div class="bg-white/10 rounded-lg p-4">
+                                <div class="text-sm text-white/70 mb-1">Seat</div>
+                                <div class="font-bold text-xl">${member.seat}</div>
+                            </div>
+                        </div>
+
+                        <div class="flex justify-between items-end">
+                            <div class="qr-container" onclick="showConfirmation(${index})" id="qr-${index}">
+                                <img src="${qrDataURL}" alt="Scannable QR Code for ${member.name}" class="w-28 h-28 block" style="image-rendering: pixelated;">
+                            </div>
+                            <div class="text-right">
+                                <div class="text-sm text-white/80 font-semibold mb-1">✓ Verified</div>
+                                <div class="text-xs text-white/60">Scan to Confirm</div>
+                                <div class="text-xs text-white/60 mt-2">Booking: LF-2025-${String(index + 1).padStart(3, '0')}</div>
+                            </div>
+                        </div>
+
+                        <div class="absolute bottom-4 right-4 text-5xl opacity-10">✈️</div>
+                    </div>
+                `;
+                container.innerHTML += passHTML;
+            });
+        }
+
+        // Countdown timer
+        function startCountdown() {
+            const estOffset = -5 * 60;
+
+            countdownInterval = setInterval(() => {
+                const now = new Date();
+                const utc = now.getTime() + (now.getTimezoneOffset() * 60000);
+                const est = new Date(utc + (estOffset * 60000));
+
+                const estToday = new Date(est.getFullYear(), est.getMonth(), est.getDate());
+                const deadline = new Date(estToday);
+                deadline.setHours(12, 30, 0, 0);
+
+                const timeLeft = deadline.getTime() - est.getTime();
+
+                if (timeLeft <= 0) {
+                    document.getElementById('countdown-timer').textContent = '⏰ Challenge Ended';
+                    document.getElementById('reward-status').textContent = '✨ Challenge available again tomorrow at 12:30 PM EST';
+                    document.getElementById('progress-bar').style.width = '75%';
+                    clearInterval(countdownInterval);
+                    return;
+                }
+
+                const hours = Math.floor(timeLeft / (1000 * 60 * 60));
+                const minutes = Math.floor((timeLeft % (1000 * 60 * 60)) / (1000 * 60));
+                const seconds = Math.floor((timeLeft % (1000 * 60)) / 1000);
+
+                document.getElementById('countdown-timer').textContent =
+                    `${hours.toString().padStart(2, '0')}:${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`;
+
+                const totalTime = 12.5 * 60 * 60 * 1000;
+                const elapsed = totalTime - timeLeft;
+                const progress = Math.min((elapsed / totalTime) * 100, 100);
+                document.getElementById('progress-bar').style.width = progress + '%';
+            }, 1000);
+        }
+
+        // Unlock reward
+        function unlockReward() {
+            if (rewardUnlocked) return;
+            rewardUnlocked = true;
+
+            createConfetti();
+
+            document.getElementById('reward-status').innerHTML = '🎉 Achievement Unlocked! Full park access granted to both Disney attractions!';
+            document.getElementById('progress-bar').style.width = '100%';
+
+            const parkAccessDiv = document.getElementById('park-access');
+            parkAccessDiv.classList.remove('hidden');
+
+            document.getElementById('park-tickets').innerHTML = `
+                <div class="bg-white/20 rounded-2xl p-8 transform hover:scale-105 transition-all">
+                    <div class="text-6xl mb-3">🏰</div>
+                    <h4 class="font-bold text-white text-xl mb-2">Disneyland® Park</h4>
+                    <p class="text-white/80">Full Day Access</p>
+                </div>
+                <div class="bg-white/20 rounded-2xl p-8 transform hover:scale-105 transition-all">
+                    <div class="text-6xl mb-3">🎬</div>
+                    <h4 class="font-bold text-white text-xl mb-2">Walt Disney Studios®</h4>
+                    <p class="text-white/80">Full Day Access</p>
+                </div>
+            `;
+
+            setTimeout(() => parkAccessDiv.scrollIntoView({ behavior: 'smooth' }), 1000);
+        }
+
+        // Confetti
+        function createConfetti() {
+            const container = document.getElementById('confetti-container');
+            const colors = ['#f59e0b', '#f43f5e', '#10b981', '#8b5cf6', '#0ea5e9'];
+
+            for (let i = 0; i < 60; i++) {
+                setTimeout(() => {
+                    const piece = document.createElement('div');
+                    piece.className = 'confetti-piece';
+                    piece.style.left = Math.random() * 100 + '%';
+                    piece.style.backgroundColor = colors[Math.floor(Math.random() * colors.length)];
+                    piece.style.animationDelay = Math.random() * 3 + 's';
+                    container.appendChild(piece);
+
+                    setTimeout(() => piece.remove(), 3000);
+                }, i * 80);
+            }
+        }
+
+        // Export passes
+        function exportAllPasses() {
+            const { jsPDF } = window.jspdf;
+            const pdf = new jsPDF('p', 'mm', 'a4');
+
+            pdf.setFontSize(22);
+            pdf.text('Luiseer Family - Magical Paris Journey 2025', 105, 20, { align: 'center' });
+            pdf.setFontSize(14);
+            pdf.text('Premium Boarding Passes', 105, 30, { align: 'center' });
+            pdf.setFontSize(10);
+            pdf.text('Anaheim, CA → Disney Village, Paris', 105, 38, { align: 'center' });
+
+            let y = 55;
+
+            familyMembers.forEach((member, index) => {
+                pdf.setFontSize(16);
+                pdf.setFont(undefined, 'bold');
+                pdf.text(member.name, 20, y);
+
+                pdf.setFontSize(11);
+                pdf.setFont(undefined, 'normal');
+                pdf.text(`Flight: ${member.flightId}  |  Seat: ${member.seat}  |  Dates: Dec 8-31, 2025`, 20, y + 7);
+                pdf.text('Route: Anaheim, CA → Disney Village, Paris', 20, y + 13);
+                pdf.text('Status: ✓ VERIFIED & CONFIRMED', 20, y + 19);
+                pdf.text(`Booking Reference: LF-2025-${String(index + 1).padStart(3, '0')}`, 20, y + 25);
+
+                y += 40;
+
+                if (y > 250 && index < familyMembers.length - 1) {
+                    pdf.addPage();
+                    y = 30;
+                }
+            });
+
+            pdf.save('Luiseer_Family_Premium_Boarding_Passes.pdf');
+        }
+
+        // Form submission
+        function submitProofForm(event) {
+            event.preventDefault();
+
+            const textProof = document.getElementById('text-proof').value;
+            const documentProof = document.getElementById('document-proof').files[0];
+
+            if (!textProof.trim()) {
+                showCustomAlert('⚠️ Please describe your achievement before submitting.');
+                return;
+            }
+
+            window.formSubmissionData = {
+                textProof: textProof,
+                documentProof: documentProof ? documentProof.name : 'No document attached',
+                submissionTime: new Date().toLocaleString()
+            };
+
+            document.getElementById('submission-modal').classList.remove('hidden');
+            document.getElementById('submission-modal').classList.add('flex');
+            document.getElementById('proof-form').reset();
+        }
+
+        function closeSubmissionModal() {
+            document.getElementById('submission-modal').classList.add('hidden');
+            document.getElementById('submission-modal').classList.remove('flex');
+        }
+
+        function openEmailComposer() {
+            const data = window.formSubmissionData;
+            const subject = encodeURIComponent('Luiseer Family - Achievement Proof Submission (Disney Paris 2025)');
+            const body = encodeURIComponent(`Dear Disney Magic Committee,
+
+I am submitting proof of my stellar achievement as part of the Luiseer Family Magical Paris Journey 2025 experience.
+
+ACHIEVEMENT DETAILS:
+${data.textProof}
+
+SUBMISSION INFO:
+- Document: ${data.documentProof}
+- Submitted: ${data.submissionTime}
+- Challenge: Monthly Stellar Record
+
+This submission is for unlocking premium park access for our family trip to Disneyland Paris (December 8-31, 2025).
+
+FAMILY MEMBERS:
+• Joan Luiser (Seat 12A)
+• Steven Luiser (Seat 12B)
+• Abigail Himes Luiser (Seat 12C)
+• Maggie Luiser (Seat 12D)
+
+Thank you for reviewing this submission. We look forward to confirmation of our premium park access.
+
+Best regards,
+The Luiseer Family
+
+---
+Generated via Luiseer Family Premium Travel Portal`);
+
+            window.location.href = `mailto:org.lionsgate@gmail.com?subject=${subject}&body=${body}`;
+            closeSubmissionModal();
+        }
+
+        function showCustomAlert(message) {
+            const modal = document.createElement('div');
+            modal.className = 'fixed inset-0 bg-black/70 backdrop-blur-md flex items-center justify-center z-50 p-4';
+            modal.innerHTML = `
+                <div class="bg-slate-800 border border-gray-700 p-8 rounded-2xl shadow-2xl max-w-sm w-full text-center">
+                    <div class="text-5xl mb-4">⚠️</div>
+                    <p class="text-gray-200 mb-6 text-lg">${message}</p>
+                    <button class="bg-golden text-white font-bold py-3 px-8 rounded-full hover:bg-amber-600 transition-all" onclick="this.closest('.fixed').remove()">OK</button>
+                </div>
+            `;
+            document.body.appendChild(modal);
+        }
+
+        // Loading management
+        function hideLoadingScreen() {
+            setTimeout(() => {
+                const loader = document.getElementById('loading-screen');
+                loader.style.opacity = '0';
+                setTimeout(() => {
+                    loader.style.display = 'none';
+                    document.getElementById('main-content').classList.remove('hidden');
+                }, 500);
+            }, 2000);
+        }
+
+        // Initialize
+        document.addEventListener('DOMContentLoaded', function() {
+            hideLoadingScreen();
+            generateBoardingPasses();
+            checkVerificationParam();
+            startCountdown();
+
+            document.getElementById('proof-form').addEventListener('submit', submitProofForm);
+
+            // Close modals on outside click
+            document.getElementById('confirmation-modal').addEventListener('click', function(e) {
+                if (e.target === this) closeConfirmationModal();
+            });
+            document.getElementById('submission-modal').addEventListener('click', function(e) {
+                if (e.target === this) closeSubmissionModal();
+            });
+        });
+    </script>
+</body>
+</html>
